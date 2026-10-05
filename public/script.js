@@ -7,4 +7,6 @@ if (typeof document !== "undefined") {
   heading.textContent = greet("World");
 }
 
-module.exports = { greet };
+if (typeof module !== "undefined") {
+  module.exports = { greet };
+}
