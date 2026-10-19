@@ -7,72 +7,81 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Task 1: skip link is the first focusable element -->
+
   <a href="#main-content" class="skip-link">Skip to main content</a>
- 
+
   <header class="site-header">
-    <p class="site-title">Web Engineering Lab</p>
-    <h1 id="greeting">Hello, World!</h1> <!-- kept from Lab 1 -->
-    <nav>
+    <div>
+      <p class="site-title">Web Engineering Lab</p>
+      <h1 id="greeting">Hello, World!</h1>
+    </div>
+    <nav aria-label="Primary">
       <ul>
-        <li><a href="#schedule" aria-current="location">Office Hours</a></li>
-        <li><a href="#feedback">Send Feedback</a></li>
+        <li><a class="nav-link" href="#schedule" aria-current="location">Office Hours</a></li>
+        <li><a class="nav-link" href="#feedback">Send Feedback</a></li>
       </ul>
     </nav>
   </header>
- 
-  <!-- Task 2: single main landmark -->
+
   <main id="main-content">
- 
-    <!-- Task 3 + 4: Office Hours -->
+
     <section id="schedule" class="card" aria-labelledby="schedule-heading">
-      <h2 id="schedule-heading">Office Hours</h2>
-      <div class="schedule-layout">
-        <table>
-          <caption>Weekly office hours</caption>
-          <thead>
-            <tr>
-              <th scope="col">Day</th>
-              <th scope="col">Time</th>
-              <th scope="col">Instructor</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Monday</td>
-              <td><time datetime="10:00">10:00</time>–<time datetime="11:00">11:00</time></td>
-              <td>Lab Engineer</td>
-            </tr>
-            <tr>
-              <td>Wednesday</td>
-              <td><time datetime="14:00">14:00</time>–<time datetime="15:00">15:00</time></td>
-              <td>Course Instructor</td>
-            </tr>
-            <tr>
-              <td>Friday</td>
-              <td><time datetime="09:00">09:00</time>–<time datetime="10:00">10:00</time></td>
-              <td>Lab Engineer</td>
-            </tr>
-          </tbody>
-        </table>
- 
-        <figure>
-          <svg role="img" aria-labelledby="pin-title" width="28" height="28" viewBox="0 0 24 24">
-            <title id="pin-title">Location pin</title>
-            <path fill="#c62828" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7z"/>
-            <circle cx="12" cy="9" r="2.6" fill="#fff"/>
-          </svg>
-          <figcaption>All office hours are held in Room 214.</figcaption>
-        </figure>
-      </div>
+      <h2 id="schedule-heading" class="span-all">Office Hours</h2>
+
+      <table>
+        <caption>Weekly office hours</caption>
+        <thead>
+          <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Time</th>
+            <th scope="col">Instructor</th>
+            <th scope="col">Book</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Monday</td>
+            <td><time datetime="10:00">10:00</time>–<time datetime="11:00">11:00</time></td>
+            <td>Lab Engineer</td>
+            <td>
+              <button type="button" data-day="Monday" aria-label="Select Monday" aria-pressed="false">Select</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Wednesday</td>
+            <td><time datetime="14:00">14:00</time>–<time datetime="15:00">15:00</time></td>
+            <td>Course Instructor</td>
+            <td>
+              <button type="button" data-day="Wednesday" aria-label="Select Wednesday" aria-pressed="false">Select</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Friday</td>
+            <td><time datetime="09:00">09:00</time>–<time datetime="10:00">10:00</time></td>
+            <td>Lab Engineer</td>
+            <td>
+              <button type="button" data-day="Friday" aria-label="Select Friday" aria-pressed="false">Select</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <figure>
+        <svg role="img" aria-labelledby="pin-title" width="28" height="28" viewBox="0 0 24 24">
+          <title id="pin-title">Location pin</title>
+          <path fill="#c62828" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7z"/>
+          <circle cx="12" cy="9" r="2.6" fill="#fff"/>
+        </svg>
+        <figcaption class="text-muted">All office hours are held in Room 214.</figcaption>
+      </figure>
+
+      <p id="status" role="status" class="span-all text-muted"></p>
     </section>
- 
-    <!-- Decorative divider -->
+
     <svg class="divider" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3" fill="#0b3d91" />
+      <circle cx="12" cy="12" r="3" fill="currentColor" />
     </svg>
- 
-    <!-- Task 5 + 6 + 7: Feedback form -->
+
     <section id="feedback" class="card" aria-labelledby="feedback-heading">
       <h2 id="feedback-heading">Send Feedback</h2>
       <form action="#" method="post">
@@ -80,15 +89,15 @@
           <label for="name">Name</label>
           <input type="text" id="name" name="name" autocomplete="name" required />
         </div>
- 
+
         <div class="field">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" autocomplete="email" required
                  aria-describedby="email-hint" />
-          <span id="email-hint" class="hint">We will only use this to reply to you.</span>
+          <span id="email-hint" class="hint text-muted">We will only use this to reply to you.</span>
         </div>
- 
-        <fieldset>
+
+        <fieldset class="span-all">
           <legend>Topic</legend>
           <label>
             <input type="radio" name="topic" value="lab" checked /> Lab content
@@ -97,21 +106,22 @@
             <input type="radio" name="topic" value="other" /> Something else
           </label>
         </fieldset>
- 
-        <div class="field">
+
+        <div class="field span-all">
           <label for="message">Message</label>
           <textarea id="message" name="message" rows="4"></textarea>
         </div>
- 
+
         <button type="submit">Send feedback</button>
       </form>
     </section>
   </main>
- 
+
   <footer>
     <address>hadiaasmat@gmail.com</address>
   </footer>
- 
+
   <script src="script.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>

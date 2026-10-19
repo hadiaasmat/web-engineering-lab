@@ -1,85 +1,174 @@
-:root {
-  --blue: #0b3d91;
-  --bg: #f6f7f9;
-  --text: #1f2937;
-  --muted: #4b5563;
-  --border: #cfd6e0;
+@layer reset, base, components, utilities;
+
+/* ---------- RESET ---------- */
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  body, h1, h2, p, figure { margin: 0; }
+
+  main {
+    max-inline-size: 60rem;
+    margin-inline: auto;
+    padding-block: 1rem;
+  }
 }
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
+
+/* ---------- BASE: tokens + typography ---------- */
+@layer base {
+  :root {
+    color-scheme: light dark;
+    --space: 1rem;
+    --color-bg: light-dark(oklch(98% 0.01 255), oklch(20% 0.02 255));
+    --color-text: light-dark(oklch(25% 0.02 255), oklch(94% 0.01 255));
+    --color-accent: light-dark(oklch(45% 0.18 255), oklch(75% 0.12 255));
+    --color-border: color-mix(in oklch, var(--color-text) 55%, var(--color-bg));
+    --color-muted: color-mix(in oklch, var(--color-text) 70%, var(--color-bg));
+    --color-surface: color-mix(in oklch, var(--color-text) 4%, var(--color-bg));
+  }
+
+  body {
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    color: var(--color-text);
+    background: var(--color-bg);
+    padding: var(--space);
+  }
+
+  input, textarea, button { font: inherit; }
 }
- 
-/* Skip link: hidden until focused */
-.skip-link {
-  position: absolute; left: 16px; top: -60px;
-  background: #fff; color: var(--blue);
-  padding: 6px 10px; border-radius: 4px; z-index: 10;
+
+/* ---------- COMPONENTS ---------- */
+@layer components {
+  svg { color: var(--color-accent); }
+
+  /* Skip link: hidden until focused */
+  .skip-link {
+    position: absolute; inset-inline-start: 16px; inset-block-start: -60px;
+    background: var(--color-bg); color: var(--color-accent);
+    padding: 6px 10px; border-radius: 4px; z-index: 10;
+  }
+  .skip-link:focus { inset-block-start: 14px; }
+
+  /* Visible focus for every interactive element */
+  a:focus-visible, button:focus-visible, input:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Header (flex row) + nav */
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space);
+    border-block-end: 1px solid var(--color-border);
+    padding-block-end: var(--space);
+  }
+  .site-title { font-size: .8rem; letter-spacing: .04em; color: var(--color-muted); }
+  h1 { font-size: 1.6rem; color: var(--color-accent); }
+
+  nav ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a { display: block; padding: 8px 4px; font-size: .9rem; }
+
+  /* Task 2 – specificity demo, final (fixed) state.
+     Original conflicting rules were:
+       nav ul li a                  { color: purple }     (0,0,4)
+       .nav-link                    { color: darkgreen }  (0,1,0)
+       a[aria-current="location"]   { color: crimson }    (0,1,1)  <- winner
+     Step 3 fix: lower the over-specific selector with :where() (0,0,1),
+     no !important. Colours below are theme-safe versions so contrast passes. */
+  :where(nav ul li) a { color: var(--color-text); }              /* (0,0,1) lowest */
+  .nav-link           { color: var(--color-accent); }            /* (0,1,0) */
+  a[aria-current="location"] {                                   /* (0,1,1) wins */
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border-radius: 6px;
+    padding-inline: 12px;
+    font-weight: 600;
+  }
+  nav a:not([aria-current]):hover { text-decoration: underline; }
+
+  /* Cards */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 18px 22px;
+  }
+  h2 { margin-block-end: 8px; font-size: 1.05rem; color: var(--color-accent); }
+  .divider { display: block; margin: 12px auto; }
+
+  /* Schedule: two-column grid (table 2/3, caption 1/3) */
+  #schedule {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space);
+    align-items: start;
+  }
+
+  /* Table */
+  table { border-collapse: collapse; font-size: .85rem; inline-size: 100%; }
+  caption { text-align: start; color: var(--color-muted); font-size: .8rem; padding-block-end: 6px; }
+  th, td { border: 1px solid var(--color-border); padding: 6px 12px; text-align: start; }
+  thead th { background: color-mix(in oklch, var(--color-accent) 15%, var(--color-bg)); }
+  tr.selected th, tr.selected td {
+    background: color-mix(in oklch, var(--color-accent) 20%, var(--color-bg));
+  }
+  figure { text-align: center; }
+  figcaption { font-size: .8rem; }
+
+  /* Form: two equal columns */
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 var(--space);
+  }
+  form button { justify-self: start; }
+  .field { margin-block-end: 12px; }
+  label { display: block; font-weight: 600; font-size: .85rem; margin-block-end: 4px; }
+  input[type="text"], input[type="email"], textarea {
+    inline-size: 100%; padding: 8px 10px;
+    color: var(--color-text); background: var(--color-bg);
+    border: 1px solid var(--color-border); border-radius: 6px;
+  }
+  .hint { display: block; font-size: .75rem; margin-block-start: 3px; }
+  fieldset {
+    border: 1px solid var(--color-border); border-radius: 6px;
+    margin: 0 0 12px; padding: 6px 12px 10px;
+  }
+  legend { font-weight: 600; font-size: .85rem; padding: 0 4px; }
+  fieldset label { display: inline-block; font-weight: 400; margin-inline-end: 16px; }
+
+  button {
+    background: var(--color-accent); color: var(--color-bg);
+    border: 0; border-radius: 6px;
+    padding: 9px 16px; font-size: .85rem; font-weight: 600; cursor: pointer;
+  }
+  button:hover { background: color-mix(in oklch, var(--color-accent) 80%, var(--color-text)); }
+
+  /* Footer */
+  footer {
+    border-block-start: 1px solid var(--color-border); text-align: center;
+    padding: 16px; margin-block-start: var(--space);
+    font-size: .8rem; color: var(--color-muted);
+  }
+  address { font-style: normal; }
+
+  /* Narrow screens: both grids become one column */
+  @media (max-width: 40rem) {
+    #schedule, form { grid-template-columns: 1fr; }
+  }
 }
-.skip-link:focus { top: 14px; }
- 
-/* Visible focus for every interactive element */
-a:focus-visible, button:focus-visible, input:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid #0b5fff;
-  outline-offset: 2px;
+
+/* ---------- UTILITIES ---------- */
+@layer utilities {
+  .text-muted { color: var(--color-muted); }
+  .span-all { grid-column: 1 / -1; }
 }
-.site-header a:focus-visible, .skip-link:focus-visible { outline-color: #ffd54a; }
- 
-/* Header + nav */
-.site-header { background: var(--blue); color: #fff; padding: 16px 24px 0; }
-.site-title { margin: 0; font-size: .8rem; letter-spacing: .04em; }
-h1 { margin: 4px 0 14px; font-size: 1.6rem; }
-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
-nav a {
-  display: block; padding: 8px 14px; color: #fff; text-decoration: none;
-  border-radius: 6px 6px 0 0; font-size: .85rem;
-}
-nav a:hover { background: rgba(255,255,255,.15); }
-nav a[aria-current="location"] { background: #fff; color: var(--blue); font-weight: 600; }
- 
-/* Main + cards */
-main { max-width: 760px; margin: 24px auto; padding: 0 16px; }
-.card {
-  background: #fff; border: 1px solid var(--border);
-  border-radius: 8px; padding: 18px 22px;
-}
-h2 { margin: 0 0 8px; font-size: 1.05rem; color: var(--blue); }
-.divider { display: block; margin: 12px auto; }
- 
-/* Table */
-.schedule-layout { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-table { border-collapse: collapse; font-size: .85rem; }
-caption { text-align: left; color: var(--muted); font-size: .8rem; padding-bottom: 6px; }
-th, td { border: 1px solid var(--border); padding: 6px 12px; text-align: left; }
-thead th { background: #eaeef6; }
-figure { margin: 0 auto; text-align: center; max-width: 170px; }
-figcaption { font-size: .8rem; color: var(--muted); }
- 
-/* Form */
-.field { margin-bottom: 12px; }
-label { display: block; font-weight: 600; font-size: .85rem; margin-bottom: 4px; }
-input[type="text"], input[type="email"], textarea {
-  width: 100%; max-width: 420px; padding: 8px 10px;
-  border: 1px solid #6b7280; border-radius: 6px; font: inherit;
-}
-.hint { display: block; font-size: .75rem; color: var(--muted); margin-top: 3px; }
-fieldset { max-width: 420px; border: 1px solid var(--border); border-radius: 6px; margin: 0 0 12px; padding: 6px 12px 10px; }
-legend { font-weight: 600; font-size: .85rem; padding: 0 4px; }
-fieldset label { display: inline-block; font-weight: 400; margin-right: 16px; }
-button {
-  background: var(--blue); color: #fff; border: 0; border-radius: 6px;
-  padding: 9px 16px; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer;
-}
-button:hover { background: #082d6b; }
- 
-/* Footer */
-footer {
-  border-top: 1px solid var(--border); text-align: center;
-  padding: 16px; font-size: .8rem; color: var(--muted);
-}
-address { font-style: normal; }
