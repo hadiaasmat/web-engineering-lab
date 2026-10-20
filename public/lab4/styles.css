@@ -1,0 +1,243 @@
+/* Task 3: declare layer order once, at the very top. Later layers win. */
+@layer reset, base, components, utilities;
+
+/* ================= Task 4: tokens (unlayered custom properties) ================= */
+:root {
+  color-scheme: light dark;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+
+  --brand:       oklch(45% 0.18 320);                          /* purple, replaces #800080 */
+  --brand-soft:  color-mix(in oklch, var(--brand) 20%, white);
+  --bg:          light-dark(oklch(99% 0 0), oklch(20% 0.01 250));
+  --text:        light-dark(oklch(25% 0.01 250), oklch(92% 0.01 250));
+  --text-muted:  color-mix(in oklch, var(--text) 65%, transparent);
+  --border:      light-dark(oklch(88% 0 0), oklch(35% 0.01 250));
+  --focus:       light-dark(oklch(50% 0.2 260), oklch(80% 0.15 260));
+  --surface:     light-dark(oklch(95% 0 0), oklch(26% 0.01 250));
+}
+
+/* ================= reset ================= */
+@layer reset {
+  /* Task 1 */
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }   /* replaces the old `body { margin: 0 }` */
+}
+
+/* ================= base ================= */
+@layer base {
+  /* Task 4: inherited typography lives on body */
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  /* Task 4: form controls inherit typography */
+  input, button, select, textarea { font: inherit; }
+
+  section {
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+    border-block-end: 1px solid var(--border);
+  }
+
+  header { background: #0f1111; }
+  footer { background: #232f3e; color: white; text-align: center; padding: 20px; }
+
+  /* Task 5: SVGs inherit text colour (set fill="currentColor" in the markup too) */
+  svg { fill: currentColor; }
+}
+
+/* ================= components ================= */
+@layer components {
+  /* Task 1: main constrained with logical properties */
+  main {
+    max-inline-size: 110ch;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-5);
+  }
+
+  /* Task 6: header is a flex container, title left, nav right */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+    min-block-size: 60px;
+    color: white;
+  }
+
+  /* Task 6: nav ul is a flex row with gap (replaces any `nav li` spacing rule) */
+  nav ul {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+  }
+
+  /* Task 2: three conflicting colour rules */
+  .nav-link { color: lightcoral; text-decoration: none; }  /* (0,1,0) */
+  nav ul li a { color: teal; }                     /* (0,0,3) */
+  :where(header #site-nav) a { color: purple; }    /* fixed: was `header #site-nav a` (1,0,2); now (0,0,1) */
+
+  .section-title { color: var(--text); font-size: 18px; }
+
+  #box { background: blue; padding: 10px 20px; }
+  .heading { color: #ffb3b3; }          /* light red: readable on the blue #box */
+  .btn-green { background: green; color: white; }
+  button { padding: 8px 14px; border: none; cursor: pointer; }
+
+  .centered-heading {
+    text-align: center;
+    text-transform: capitalize;
+  }
+
+  .outer-px { font-size: 25px; }
+  .inner-px { font-size: 10px; }
+  .outer-em { font-size: 2em; }
+  .inner-em { font-size: 0.5em; }
+  .outer-rem { font-size: 2rem; }
+  .inner-rem { font-size: 0.5rem; }
+
+  .logo { color: var(--brand-soft); font-size: 25px; font-weight: bold; }
+  #site-nav { display: flex; align-items: center; gap: var(--space-4); }
+  .search { display: flex; }
+  .search input { padding: 6px; border: none; }
+  .search button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--brand);
+    color: white;
+  }
+  .search svg { inline-size: 1em; block-size: 1em; }   /* fill comes from currentColor */
+
+  .btn-blue { background: blue; color: white; }        /* moved out of the <style> tag in index.html */
+
+  .content { display: flex; gap: 20px; }
+  .box { width: 100px; height: 100px; border: 3px solid black; opacity: 0.5; }
+  .b1 { background: red; }
+  .b2 { background: green; }
+  .b3 { background: blue; border-radius: 50%; }
+
+  .love-nature {
+    position: fixed;
+    right: 0;
+    top: 40%;
+    z-index: 1000;
+    padding: 40px 20px;
+    color: white;
+    font-weight: bold;
+    background-image: url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80");
+    background-size: cover;
+    text-shadow: 1px 1px 3px black;
+  }
+
+  .parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background: var(--surface);
+  }
+  .child { background: teal; color: white; padding: 20px; margin: 0 8px; }
+  .child.self { align-self: flex-end; background: purple; }
+
+  .mq { padding: 30px; color: white; background: blue; }
+  @media (max-width: 600px) { .mq { background: crimson; } }
+  @media (max-width: 400px) { .mq { background: pink; color: black; } }
+  @media (max-width: 300px) { .mq { background: green; } }
+
+  .hover-btn {
+    font-size: 16px;
+    background: #6a1b9a;
+    color: white;
+    transition: font-size 0.3s ease, transform 0.3s ease;
+  }
+  .hover-btn:hover {
+    font-size: 24px;
+    transform: rotate(-8deg);
+  }
+
+  .loader {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 10px solid var(--border);
+    border-top-color: #f08804;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+}
+
+@layer base {
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  table { inline-size: 100%; border-collapse: collapse; }
+  caption { text-align: start; font-weight: bold; padding-block-end: var(--space-2); }
+  th, td { text-align: start; padding: var(--space-2); border-block-end: 1px solid var(--border); }
+  fieldset { border: 1px solid var(--border); padding: var(--space-3); }
+  input:not([type="radio"]), textarea {
+    inline-size: 100%;
+    padding: var(--space-2);
+    border: 1px solid var(--border);
+  }
+}
+
+@layer components {
+  /* Task 7 */
+  #schedule {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  #schedule > * { min-inline-size: 0; }          /* lets the table scroll instead of blowing out the grid */
+  .table-wrap { overflow-x: auto; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+  .field { display: grid; gap: var(--space-1); }
+
+  /* Task 10: selected state */
+  .book-btn {
+    min-block-size: 2.5rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .book-btn.selected { background: var(--brand); color: white; border-color: var(--brand); }
+
+  /* Task 8: one media query for both grids */
+  @media (max-width: 40rem) {
+    #schedule, .grid-2 { grid-template-columns: 1fr; }
+  }
+}
+
+/* ================= utilities ================= */
+@layer utilities {
+  .span-all { grid-column: 1 / -1; }
+  .text-muted { color: var(--text-muted); }
+}

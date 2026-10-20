@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Campus Connect - Office Hours</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <h1 id="greeting">Campus Connect</h1>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a class="nav-link" href="#schedule">Schedule</a></li>
+        <li><a class="nav-link" href="#booking">Book a slot</a></li>
+        <li><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <p class="text-muted">View office hours and reserve a meeting slot.</p>
+
+    <section id="schedule" aria-labelledby="schedule-title">
+      <div class="schedule-info">
+        <h2 id="schedule-title">Office Hours</h2>
+        <p>Choose an available day to book a meeting.</p>
+
+        <svg width="48" height="48" viewBox="0 0 24 24"
+             role="img" aria-label="Calendar icon">
+          <rect x="3" y="5" width="18" height="16" rx="2"
+                fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M7 3v4M17 3v4M3 10h18"
+                fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <caption>Weekly office hours and booking options</caption>
+          <thead>
+            <tr>
+              <th scope="col">Day</th>
+              <th scope="col">Time</th>
+              <th scope="col">Location</th>
+              <th scope="col">Book</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Monday</td>
+              <td>10:00 AM - 12:00 PM</td>
+              <td>Room 101</td>
+              <td><button type="button" class="book-btn" data-day="Monday">Book</button></td>
+            </tr>
+            <tr>
+              <td>Tuesday</td>
+              <td>12:00 PM - 2:00 PM</td>
+              <td>Room 102</td>
+              <td><button type="button" class="book-btn" data-day="Tuesday">Book</button></td>
+            </tr>
+            <tr>
+              <td>Wednesday</td>
+              <td>10:00 AM - 12:00 PM</td>
+              <td>Room 101</td>
+              <td><button type="button" class="book-btn" data-day="Wednesday">Book</button></td>
+            </tr>
+            <tr>
+              <td>Thursday</td>
+              <td>1:00 PM - 3:00 PM</td>
+              <td>Room 103</td>
+              <td><button type="button" class="book-btn" data-day="Thursday">Book</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="booking" aria-labelledby="booking-title">
+      <h2 id="booking-title" class="span-all">Book an Office Hour</h2>
+
+      <form id="booking-form">
+        <div>
+          <label for="student-name">Your name</label>
+          <input id="student-name" name="student-name" type="text" required>
+        </div>
+
+        <div>
+          <label for="student-email">Email address</label>
+          <input id="student-email" name="student-email" type="email" required>
+        </div>
+
+        <fieldset class="span-all">
+          <legend>Meeting type</legend>
+          <label>
+            <input type="radio" name="meeting-type" value="In person" required>
+            In person
+          </label>
+          <label>
+            <input type="radio" name="meeting-type" value="Online">
+            Online
+          </label>
+        </fieldset>
+
+        <div class="span-all">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+
+        <button class="span-all" type="submit">Submit Request</button>
+      </form>
+
+      <p id="booking-status" class="text-muted" role="status" aria-live="polite">
+        No bookings yet.
+      </p>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <address>
+        Computer Science Department<br>
+        Email: <a href="mailto:office@example.com">office@example.com</a>
+      </address>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Connect</p>
+  </footer>
+</body>
+</html>

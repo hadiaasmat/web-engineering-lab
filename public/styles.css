@@ -23,6 +23,7 @@
     --color-border: color-mix(in oklch, var(--color-text) 55%, var(--color-bg));
     --color-muted: color-mix(in oklch, var(--color-text) 70%, var(--color-bg));
     --color-surface: color-mix(in oklch, var(--color-text) 4%, var(--color-bg));
+    --color-error: light-dark(oklch(45% 0.2 25), oklch(75% 0.15 25));
   }
 
   body {
@@ -152,6 +153,15 @@
     padding: 9px 16px; font-size: .85rem; font-weight: 600; cursor: pointer;
   }
   button:hover { background: color-mix(in oklch, var(--color-accent) 80%, var(--color-text)); }
+
+  /* Validation messages (feedback.js) */
+  .error {
+    display: block;
+    color: var(--color-error);
+  }
+  input[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
 
   /* Footer */
   footer {

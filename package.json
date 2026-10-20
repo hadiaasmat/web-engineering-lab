@@ -1,22 +1,13 @@
 {
   "name": "web-engineering-lab",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "node --test",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "start": "serve public"
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.12.0",
-    "prettier": "^3.9.9",
-    "serve": "^14.2.6",
-    "server": "^1.0.42"
+    "typescript": "^7.0.2"
   }
 }

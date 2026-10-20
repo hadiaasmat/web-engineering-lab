@@ -1,31 +1,35 @@
-import { delay, makeCounter } from "./utils.js";
-
-const status = document.querySelector("#status");
-const tbody = document.querySelector("#schedule tbody");
+import { delay, makeCounter, getRequired, describeSlot } from "./utils.js";
+// Matches the three rows of the office-hours table.
+const slots = [
+    { day: "Monday", start: "10:00", end: "11:00", room: "Room 214" },
+    { day: "Wednesday", start: "14:00", end: "15:00", room: "Room 214" },
+    { day: "Friday", start: "09:00", end: "10:00", room: "Room 214" },
+];
+const status = getRequired("#status");
+const tbody = getRequired("#schedule tbody");
 const nextBooking = makeCounter();
-
-// One delegated listener on the parent <tbody>.
 tbody.addEventListener("click", async (event) => {
-  const button = event.target.closest("button[data-day]");
-  if (!button) return;
-
-  const day = button.dataset.day;
-  const row = button.closest("tr");
-
-  // Ignore extra clicks while this row is still updating
-  // (not using `disabled`, so keyboard focus is not lost).
-  if (row.dataset.busy) return;
-  row.dataset.busy = "true";
-
-  status.textContent = `Updating ${day}...`;
-  await delay(1000); // pauses only this handler; the page stays responsive
-
-  const selected = row.classList.toggle("selected");
-  button.setAttribute("aria-pressed", String(selected));
-  delete row.dataset.busy;
-
-  const count = document.querySelectorAll("#schedule tr.selected").length;
-  status.textContent = selected
-    ? `Booking #${nextBooking()} confirmed for ${day}. ${count} slot(s) booked.`
-    : `Booking for ${day} cancelled. ${count} slot(s) booked.`;
+    const target = event.target;
+    if (!(target instanceof Element))
+        return; // EventTarget | null -> Element
+    const button = target.closest("button[data-day]");
+    const row = target.closest("tr");
+    if (button === null || row === null)
+        return; // closest() may return null
+    const slot = slots.find((s) => s.day === button.dataset.day);
+    if (slot === undefined)
+        return; // find() may return undefined
+    // Ignore extra clicks while this row is still updating.
+    if (row.dataset.busy)
+        return;
+    row.dataset.busy = "true";
+    status.textContent = `Updating ${slot.day}...`;
+    await delay(1000);
+    const booked = row.classList.toggle("selected");
+    button.setAttribute("aria-pressed", String(booked));
+    delete row.dataset.busy;
+    const count = document.querySelectorAll("#schedule tr.selected").length;
+    status.textContent = booked
+        ? `Booking #${nextBooking()} confirmed: ${describeSlot(slot)}. ${count} of ${slots.length} slots booked.`
+        : `Booking for ${slot.day} cancelled. ${count} of ${slots.length} slots booked.`;
 });
